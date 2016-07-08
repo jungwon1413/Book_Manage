@@ -35,7 +35,7 @@ void main()
 	printf("3. 도서검색\n");
 	printf("4. 도서정보 수정\n");
 	printf("5. 항목 정렬\n");
-	printf("6. 프로그램 종료\n");
+	printf("6. 프로그램 종료\n\n");
 	ch = _getch(); // 여기까지 MENU()라는 명령어로 구현해보자
 
 	switch (ch)
@@ -47,15 +47,15 @@ void main()
 			{
 				printf("제목 : ");
 				gets_s(arr[count].title, sizeof(arr[count].title));
-				fflush(stdin);
+				while (getchar() != '\n'); // fflush(stdin)대신에 써봅니다. 원래 의도했던 동작과 다를때가 많음...
 
 				printf("저자 : ");
 				gets_s(arr[count].author, sizeof(arr[count].author));
-				fflush(stdin);
+				while (getchar() != '\n');
 
 				printf("페이지수 : ");
 				scanf_s("%d", &arr[count].page);
-				fflush(stdin);
+				while (getchar() != '\n');
 
 				printf("\n");
 				++count;
@@ -66,17 +66,23 @@ void main()
 			{
 				printf("추가 입력을 하시겠습니까?\n");
 				printf("----(Y/N)----\n");
-				condition = _getch();
+				//문자입력을 버퍼없이 받고싶은데 뭔가 되지를 않습니다.
 				if (condition == ('y' || 'Y'))
+				{
 					run = 1;
+					break;
+				}
 				else if (condition == ('n' || 'N'))
+				{
 					run = 0;
+					break;
+				}
 				else
-					printf("잘못된 입력입니다. 다시 입력해주십시오.\n");
+					printf("잘못된 입력입니다. 다시 입력해주십시오.\n\n");
 			}
 		}
 		break;
-	case '2':
+	case '2': // 일단 전체출력만 구현해놓았습니다.
 		for (i=0; i<count; ++i)
 		{
 			printf("====%d번 도서====\n", i);
