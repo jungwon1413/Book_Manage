@@ -46,8 +46,8 @@ void main()
 			if (run != 0)
 			{
 				printf("제목 : ");
-				gets_s(arr[count].title, sizeof(arr[count].title));
-				while (getchar() != '\n'); // fflush(stdin)대신에 써봅니다. 원래 의도했던 동작과 다를때가 많음...
+				gets_s(arr[count].title, sizeof(arr[count].title)); // 이 함수는 버퍼를 이미 소진하는 함수이다. 그러므로 fflush나 while (getchar...)같은 버퍼비움절차가 필요하지 않습니다.
+				//while (getchar() != '\n'); // fflush(stdin)대신에 써봅니다. 원래 의도했던 동작과 다를때가 많음...
 
 				printf("저자 : ");
 				gets_s(arr[count].author, sizeof(arr[count].author));
@@ -62,7 +62,7 @@ void main()
 			}
 			else
 				break;
-			while (condition != ('y' || 'Y' || 'n' || 'N'))
+			while (condition != ('y' || 'Y' || 'n' || 'N')) // 따로따로 T/F 연산을 할수있도록 해줍시다.
 			{
 				printf("추가 입력을 하시겠습니까?\n");
 				printf("----(Y/N)----\n");
