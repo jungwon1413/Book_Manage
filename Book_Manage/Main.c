@@ -1,11 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
 
-typedef struct Book 
+typedef struct _BOOK 
 {
 	char title[300];
 	char author[100];
 	int page;
-}book;
+} BOOK;
 
 void main()
 {
@@ -22,7 +24,7 @@ void main()
 	- 책이름
 	- 저자
 	- 페이지*/
-	book arr[3];
+	BOOK arr[3];
 	int count = 0;
 	int i = 0;
 	int run = 1;
@@ -44,19 +46,20 @@ void main()
 			if (run != 0)
 			{
 				printf("제목 : ");
-				gets_s(arr.title[i], sizeof(arr[i]));
-				++i;
+				gets_s(arr[count].title, sizeof(arr[count].title));
+
 				printf("저자 : ");
-				gets_s(arr.author[i], sizeof(arr[i]));
-				++i;
+				gets_s(arr[count].author, sizeof(arr[count].author));
+
 				printf("페이지수 : ");
-				scanf_s(arr.page[i], sizeof(arr[i]));
-				i = 0;
+				scanf_s(&arr[count].page, sizeof(int));
+
+				printf("\n");
 				++count;
 			}
 			else
 				break;
-			
+
 			printf("추가 입력을 하시겠습니까?\n");
 			printf("(Y / N)\n");
 			condition = _getch();
@@ -65,16 +68,16 @@ void main()
 			else if (condition == ('n' || 'N'))
 				run = 0;
 			else
-				printf("잘못된 입력입니다. 다시 입력해주십시오.\n")
+				printf("잘못된 입력입니다. 다시 입력해주십시오.\n");
 		}
 		break;
 	case 2:
 		for (i=0; i<count; ++i)
 		{
 			printf("====%d번 도서====\n", i);
-			printf("제목 : %s\n", arr.title[i]);
-			printf("저자 : %s\n", arr.author[i]);
-			printf("페이지수 : %s\n", arr.page[i]);
+			printf("제목 : %s\n", arr[i].title);
+			printf("저자 : %s\n", arr[i].author);
+			printf("페이지수 : %d\n", arr[i].page);
 		}
 		break;
 	case 3:
