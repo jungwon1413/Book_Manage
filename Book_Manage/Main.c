@@ -1,5 +1,12 @@
 #include <stdio.h>
 
+typedef struct Book 
+{
+	char title[300];
+	char author[100];
+	int page;
+}book;
+
 void main()
 {
 	/*아래 주석은 대략적인 도서관리 시스템 구성요소를 적어놓습니다.
@@ -15,4 +22,71 @@ void main()
 	- 책이름
 	- 저자
 	- 페이지*/
+	book arr[3];
+	int count = 0;
+	int i = 0;
+	int run = 1;
+	int ch;
+	char condition;
+	printf("1. 도서정보 입력\n");
+	printf("2. 도서정보 출력\n");
+	printf("3. 도서검색\n");
+	printf("4. 도서정보 수정\n");
+	printf("5. 항목 정렬\n");
+	printf("6. 프로그램 종료\n");
+	ch = _getch(); // 여기까지 MENU()라는 명령어로 구현해보자
+
+	switch (ch)
+	{
+	case 1:
+		while (run == 1)
+		{
+			if (run != 0)
+			{
+				printf("제목 : ");
+				gets_s(arr.title[i], sizeof(arr[i]));
+				++i;
+				printf("저자 : ");
+				gets_s(arr.author[i], sizeof(arr[i]));
+				++i;
+				printf("페이지수 : ");
+				scanf_s(arr.page[i], sizeof(arr[i]));
+				i = 0;
+				++count;
+			}
+			else
+				break;
+			
+			printf("추가 입력을 하시겠습니까?\n");
+			printf("(Y / N)\n");
+			condition = _getch();
+			if (condition == ('y' || 'Y'))
+				run = 1;
+			else if (condition == ('n' || 'N'))
+				run = 0;
+			else
+				printf("잘못된 입력입니다. 다시 입력해주십시오.\n")
+		}
+		break;
+	case 2:
+		for (i=0; i<count; ++i)
+		{
+			printf("====%d번 도서====\n", i);
+			printf("제목 : %s\n", arr.title[i]);
+			printf("저자 : %s\n", arr.author[i]);
+			printf("페이지수 : %s\n", arr.page[i]);
+		}
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	default:
+		printf("잘못된 입력입니다. 다시 입력해주십시오.\n");
+		break;
+	}
 }
