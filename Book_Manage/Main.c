@@ -1,106 +1,414 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <conio.h>
 
-typedef struct _BOOK 
+struct BOOK
 {
-	char title[300];
-	char author[100];
+	char* title;
+	char* author;
 	int page;
-} BOOK;
+};
+
+struct BOOK_INFO
+{
+	BOOK books[200];
+	int bookCount;
+};
+
+void FreeBook (BOOK* bk)
+{
+	free(bk->title);
+	free(bk->author);
+}
+
+void InputBookTitle(BOOK* bk)
+{
+	char buf[500];
+
+	printf("ì œëª©ì„ ì…ë ¥í•˜ì„¸ìš”: ");
+	gets_s(buf, 500);
+
+	bk->title = (char*)malloc(strlen(buf)+1);
+	
+	strcpy_s(bk->title, strlen(buf)+1, buf);
+}
+
+void InputBookAuthor(BOOK* bk)
+{
+	char buf[500];
+
+	printf("ì €ìë¥¼ ì…ë ¥í•˜ì„¸ìš”: ");
+	gets_s(buf, 500);
+
+	bk->author = (char*)malloc(strlen(buf)+1);
+	
+	strcpy_s(bk->author, strlen(buf)+1, buf);
+}
+
+void InputBookPage(BOOK* bk)
+{
+	printf("í˜ì´ì§€ ìˆ˜: ");
+	scanf_s("%d", &bk->page, sizeof(int));
+}
+
+void InputBook(BOOK_INFO* bkarr)
+{
+	InputBookTitle(&bkarr->books[bkarr->bookCount]);
+	InputBookAuthor(&bkarr->books[bkarr->bookCount]);
+	InputBookPage(&bkarr->books[bkarr->bookCount]);
+	fflush(stdin); // ë‹¤ë¥´ê²Œ ë°”ê¿€ ë°©ë²•ì„ ê³ ë¯¼í•´ë´…ì‹œë‹¤.
+	bkarr->bookCount++;
+}
+
+void PrintBookTitle(BOOK* bk)
+{
+	printf("ì œëª©: %s\n", bk->title);
+}
+
+void PrintBookAuthor(BOOK* bk)
+{
+	printf("ì €ì: %s\n", bk->author);
+}
+
+void PrintBookPage(BOOK* bk)
+{
+	printf("í˜ì´ì§€ìˆ˜: %d\n", bk->page);
+}
+
+void PrintBook(BOOK_INFO* bkarr)
+{
+	int i;
+	for (i=0; i<bkarr->bookCount; ++i)
+	{
+		PrintBookTitle(&bkarr->books[i]);
+		PrintBookAuthor(&bkarr->books[i]);
+		PrintBookPage(&bkarr->books[i]);
+		printf("\n");
+	}
+}
+
+void SearchBookTitle(BOOK_INFO* bkarr)
+{
+	int i;
+	int check;
+	int status = 0;
+	char buf[500];
+
+	printf("ì œëª© ê²€ìƒ‰: ");
+	gets_s(buf, 500);
+
+	for (i=0; i < bkarr->bookCount; ++i)
+	{
+		check = strcmp(bkarr->books[i].title, buf);
+		if (check == 0)
+		{
+			printf("\n[%d]\n", i+1);
+			PrintBookTitle(&bkarr->books[i]);
+			PrintBookAuthor(&bkarr->books[i]);
+			PrintBookPage(&bkarr->books[i]);
+			status = 1; // í•˜ë‚˜ë¼ë„ ì°¾ìœ¼ë©´ statusê°€ 1ë¡œ ë³€í•¨
+		}
+		check = 1; // ê²€ìƒ‰ë¹„êµì ë¦¬ì…‹
+	}
+
+	if (status == 0)
+		printf("\ní•´ë‹¹ ì„œì ì€ ê²€ìƒ‰ ê²°ê³¼ì— ì—†ìŠµë‹ˆë‹¤.\n");
+}
+
+void SearchBookAuthor(BOOK_INFO* bkarr)
+{
+	int i;
+	int check;
+	int status = 0;
+	char buf[500];
+
+	printf("ì €ì ê²€ìƒ‰: ");
+	gets_s(buf, 500);
+
+	for (i=0; i < bkarr->bookCount; ++i)
+	{
+		check = strcmp(bkarr->books[i].author, buf);
+		if (check == 0)
+		{
+			printf("\n[%d]\n", i+1);
+			PrintBookTitle(&bkarr->books[i]);
+			PrintBookAuthor(&bkarr->books[i]);
+			PrintBookPage(&bkarr->books[i]);
+			status = 1; // í•˜ë‚˜ë¼ë„ ì°¾ìœ¼ë©´ statusê°€ 1ë¡œ ë³€í•¨
+		}
+		check = 1; // ê²€ìƒ‰ë¹„êµì ë¦¬ì…‹
+	}
+
+	if (status == 0)
+		printf("\ní•´ë‹¹ ì„œì ì€ ê²€ìƒ‰ ê²°ê³¼ì— ì—†ìŠµë‹ˆë‹¤.\n");
+}
+
+void SearchBook(BOOK_INFO* bkarr)
+{
+	int input = 1;
+	
+	while(input)
+	{
+		printf("\nì°¾ëŠ” í•­ëª©ì„ ì„ íƒí•˜ì„¸ìš”\n");
+		printf("1. ì œëª©\n");
+		printf("2. ì €ì\n");
+		printf("0. ê²€ìƒ‰ ì¢…ë£Œ\n");
+		switch(_getch())
+		{
+			case '1':
+				SearchBookTitle(bkarr);
+				break;
+			case '2':
+				SearchBookAuthor(bkarr);
+				break;
+			case '0':
+				printf("ê²€ìƒ‰ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.\n");
+				input = 0;
+				break;
+			default:
+				printf("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤.\n");
+				break;
+		}
+	}
+}
+
+void FileSaveBook(BOOK_INFO* bkarr)
+{
+	int i;
+	FILE* pf;
+	fopen_s(&pf, "BookData.txt", "wt");
+	for (i=0; i<bkarr->bookCount; ++i)
+	{
+		fprintf(pf, "[%dë²ˆ]\n", i+1);
+		fprintf(pf, "ì œëª©: %s\n", bkarr->books[i].title);
+		fprintf(pf, "ì €ì: %s\n", bkarr->books[i].author);
+		fprintf(pf, "í˜ì´ì§€ìˆ˜: %d\n\n", bkarr->books[i].page);
+	}
+	fclose(pf);
+}
+
+void ReadBinaryFile(BOOK_INFO* bkarr)
+{
+	FILE* pf;
+	int i;
+
+	fopen_s(&pf, "Book_Info.dsf", "rb");
+	if (pf == NULL)
+		return;
+	fread(&bkarr->bookCount, sizeof(int), 1, pf);
+	for (i=0; i<bkarr->bookCount; ++i)
+	{
+		int slen;
+		fread(&slen, sizeof(int), 1, pf);
+		bkarr->books[i].title = (char*) malloc (slen);
+		fread(bkarr->books[i].title, slen, 1, pf);
+
+		fread(&slen, sizeof(int), 1, pf);
+		bkarr->books[i].author = (char*) malloc (slen);
+		fread(bkarr->books[i].author, slen, 1, pf);
+		
+		fread(&bkarr->books[i].page, sizeof(int), 1, pf);
+	}
+	fclose(pf);
+}
+
+void WriteBinaryFile(BOOK_INFO* bkarr)
+{
+	FILE* pf;
+	int i;
+
+	fopen_s(&pf, "Book_Info.dsf", "wb");
+	fwrite(&bkarr->bookCount, sizeof(int), 1, pf);
+	for (i=0; i<bkarr->bookCount; ++i)
+	{
+		int slen = strlen(bkarr->books[i].title)+1;
+		fwrite(&slen, sizeof(int), 1, pf);
+		fwrite(bkarr->books[i].title, slen, 1, pf);
+
+		slen = strlen(bkarr->books[i].author)+1;
+		fwrite(&slen, sizeof(int), 1, pf);
+		fwrite(bkarr->books[i].author, slen, 1, pf);
+
+		slen = bkarr->books[i].page;
+		fwrite(&slen, sizeof(int), 1, pf);
+	}
+	fclose(pf);
+}
+
+
+void ResetBook(BOOK_INFO* bkarr) // ì™„ì „ë¦¬ì…‹
+{
+	int i;
+	char check;
+	printf("ëª¨ë“  ë°ì´í„°ë¥¼ ì‚­ì œí•©ë‹ˆë‹¤. ì •ë§ ë™ì˜í•˜ì‹­ë‹ˆê¹Œ? (Y/N)\n");
+
+	check = _getch();
+	switch(check)
+	{
+		if (check == 'y' || check == 'Y')
+		{
+			case 'Y':
+			case 'y':
+				for (i=0; i<bkarr->bookCount; ++i)
+				{
+					FreeBook(&bkarr->books[i]);
+				}
+				bkarr->bookCount = 0;
+				WriteBinaryFile(bkarr);
+				printf("***ëª¨ë“  ë°ì´í„°ë¥¼ ì œê±°í•˜ì˜€ìŠµë‹ˆë‹¤.***\n");
+				break;
+		}
+		else if (check == 'n' || check == 'N')
+		{
+			case 'N':
+			case 'n':
+				printf("í•´ë‹¹ ì‘ì—…ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.\n");
+				break;
+		}
+		else
+		{
+			default:
+				printf("ì˜¬ë°”ë¥¸ ì…ë ¥ì´ ì•„ë‹™ë‹ˆë‹¤.\n");
+				ResetBook(bkarr);
+				break;
+		}
+	}
+}
+
+void DeleteBook(BOOK_INFO* bkarr) // ì„ íƒì‚­ì œ
+{
+	int i;
+	int num;
+	int input = 1;
+	
+	while (input)
+	{
+		printf("ì›í•˜ëŠ” í•­ëª©ì˜ ë²ˆí˜¸ë¥¼ ì ì–´ì£¼ì„¸ìš”: ");
+		scanf_s("%d\n", &num);
+
+		if (num<=0 || num>bkarr->bookCount)
+			printf("í•´ë‹¹ ë²ˆí˜¸ëŠ” ì¡´ì¬í•˜ì§€ì•ŠìŠµë‹ˆë‹¤.\n");
+		else
+		{
+			for (i=num; i<bkarr->bookCount; ++i)
+			{
+				if (i < bkarr->bookCount-1)
+				{
+					int slen = strlen(bkarr->books[i+1].title)+1;
+					FreeBook(&bkarr->books[i]);
+					bkarr->books[i].title = (char*)malloc(slen);
+					bkarr->books[i].title = bkarr->books[i+1].title;
+
+					slen = strlen(bkarr->books[i+1].author)+1;
+					FreeBook(&bkarr->books[i]);
+					bkarr->books[i].author = (char*)malloc(slen);
+					bkarr->books[i].author = bkarr->books[i+1].author;
+
+					bkarr->books[i].page = bkarr->books[i+1].page;
+				}
+				else
+					FreeBook(&bkarr->books[i]);
+			}
+			input = 0;
+		}
+	}
+}
+
+void RemoveBook(BOOK_INFO* bkarr)
+{
+	int input = 1;
+
+	while(input)
+	{
+		printf("\nì›í•˜ëŠ” ë©”ë‰´ë¥¼ ì„ íƒí•˜ì„¸ìš”\n");
+		printf("1. ì „ì²´ ì‚­ì œ (ëª¨ë“  ìë£Œ ì‚­ì œ)\n");
+		printf("2. ì„ íƒ ì‚­ì œ\n");
+		printf("0. ì‚­ì œë©”ë‰´ ì¢…ë£Œ\n");
+		switch(_getch())
+		{
+		case '1':
+			ResetBook(bkarr);
+			break;
+		case '2':
+			DeleteBook(bkarr);
+			break;
+		case '0':
+			printf("ì‚­ì œë©”ë‰´ë¥¼ ì¢…ë£Œí•©ë‹ˆë‹¤.\n");
+			input = 0;
+			break;
+		default:
+			printf("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤.\n");
+			break;
+		}
+	}
+}
+
+void MENU()
+{
+	printf("==================\n");
+	printf("1. ë„ì„œì •ë³´ ì…ë ¥\n");
+	printf("2. ë„ì„œì •ë³´ ì¶œë ¥\n");
+	printf("3. ë„ì„œì •ë³´ íŒŒì¼ì €ì¥\n");
+	printf("4. ë„ì„œì •ë³´ ê²€ìƒ‰\n");
+	printf("5. ë„ì„œì •ë³´ ì‚­ì œ\n");
+	printf("0. í”„ë¡œê·¸ë¨ ì¢…ë£Œ\n");
+	printf("==================\n");
+}
+
+void RUN(BOOK_INFO* bkArray)
+{
+	int run = 1;
+	while (run)
+	{
+		MENU();
+		switch(_getch())
+		{
+		case '1':
+			InputBook(bkArray);
+			break;
+		case '2':
+			PrintBook(bkArray);
+			break;
+		case '3':
+			FileSaveBook(bkArray);
+			break;
+		case '4':
+			SearchBook(bkArray);
+			break;
+		case '5':
+			RemoveBook(bkArray);
+			break;
+		case '0':
+			printf("***í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.***\n");
+			run = 0;
+			break;
+		default:
+			printf("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤.\n");
+			break;
+		}
+	}
+}
+
+void InitBook(BOOK_INFO* bkarr)
+{
+	bkarr->bookCount = 0;
+	ReadBinaryFile(bkarr);	
+}
+
+void EndBook(BOOK_INFO* bkarr)
+{
+	WriteBinaryFile(bkarr);
+	int i;
+	for (i=0; i<bkarr->bookCount; ++i)
+		FreeBook(&bkarr->books[i]);
+}
 
 void main()
 {
-	/*¾Æ·¡ ÁÖ¼®Àº ´ë·«ÀûÀÎ µµ¼­°ü¸® ½Ã½ºÅÛ ±¸¼º¿ä¼Ò¸¦ Àû¾î³õ½À´Ï´Ù.
-	1. ¸Ş´ºÀÇ ±¸¼º
-	- ÀÔ·Â (Á¾·á ½ÃÄö½º ÀÔ·Â½Ã±îÁö ¹«ÇÑÀÔ·Â) - ÃßÈÄ¿¡ ÆÄÀÏ·Î ÀÔ·ÂÇÒ ¿¹Á¤ÀÔ´Ï´Ù.
-	- Ãâ·Â (°¢ Ç×¸ñ, ¶Ç´Â ÀüÃ¼ ¼±ÅÃ°¡´É) - ÃßÈÄ¿¡ ÆÄÀÏ¿¡¼­ Á÷Á¢ ÀĞ¾îµéÀÏ ¿¹Á¤ÀÔ´Ï´Ù.
-	- °Ë»ö (¿øÇÏ´Â Ç×¸ñÀ» Ã£¾Æ¼­ ÇØ´ç ¼­ÀûÀÇ »ó¼¼Á¤º¸ Ç¥±â)
-	- ¼öÁ¤ (Ã¥ ¼ø¹ø ÀÔ·ÂÈÄ ¼öÁ¤À» ¿øÇÏ´Â Ç×¸ñÀ» ÁöÁ¤ÇÏ¿© º¯°æ)
-	- Á¤·Ä (¿øÇÏ´Â Ç×¸ñÀ¸·Î)
-	- Á¾·á
-	
-	2. µµ¼­ ±¸Á¶Ã¼
-	- Ã¥ÀÌ¸§
-	- ÀúÀÚ
-	- ÆäÀÌÁö*/
-	BOOK arr[300];
-	int count = 0;
-	int i = 0;
-	int run = 1;
-	int ch;
-	char condition = 0;
-	printf("1. µµ¼­Á¤º¸ ÀÔ·Â\n");
-	printf("2. µµ¼­Á¤º¸ Ãâ·Â\n");
-	printf("3. µµ¼­°Ë»ö\n");
-	printf("4. µµ¼­Á¤º¸ ¼öÁ¤\n");
-	printf("5. Ç×¸ñ Á¤·Ä\n");
-	printf("6. ÇÁ·Î±×·¥ Á¾·á\n\n");
-	ch = _getch(); // ¿©±â±îÁö MENU()¶ó´Â ¸í·É¾î·Î ±¸ÇöÇØº¸ÀÚ
+	BOOK_INFO bkArray;
 
-	switch (ch)
-	{
-	case '1':
-		while (run != 0)
-		{
-			if (run != 0)
-			{
-				printf("Á¦¸ñ : ");
-				gets_s(arr[count].title, sizeof(arr[count].title)); // ÀÌ ÇÔ¼ö´Â ¹öÆÛ¸¦ ÀÌ¹Ì ¼ÒÁøÇÏ´Â ÇÔ¼öÀÌ´Ù. ±×·¯¹Ç·Î fflush³ª while (getchar...)°°Àº ¹öÆÛºñ¿òÀıÂ÷°¡ ÇÊ¿äÇÏÁö ¾Ê½À´Ï´Ù.
-				//while (getchar() != '\n'); // fflush(stdin)´ë½Å¿¡ ½áº¾´Ï´Ù. ¿ø·¡ ÀÇµµÇß´ø µ¿ÀÛ°ú ´Ù¸¦¶§°¡ ¸¹À½...
-
-				printf("ÀúÀÚ : ");
-				gets_s(arr[count].author, sizeof(arr[count].author));
-				while (getchar() != '\n');
-
-				printf("ÆäÀÌÁö¼ö : ");
-				scanf_s("%d", &arr[count].page);
-				while (getchar() != '\n');
-
-				printf("\n");
-				++count;
-			}
-			else
-				break;
-			while (condition != ('y' || 'Y' || 'n' || 'N')) // µû·Îµû·Î T/F ¿¬»êÀ» ÇÒ¼öÀÖµµ·Ï ÇØÁİ½Ã´Ù.
-			{
-				printf("Ãß°¡ ÀÔ·ÂÀ» ÇÏ½Ã°Ú½À´Ï±î?\n");
-				printf("----(Y/N)----\n");
-				//¹®ÀÚÀÔ·ÂÀ» ¹öÆÛ¾øÀÌ ¹Ş°í½ÍÀºµ¥ ¹º°¡ µÇÁö¸¦ ¾Ê½À´Ï´Ù.
-				if (condition == ('y' || 'Y'))
-				{
-					run = 1;
-					break;
-				}
-				else if (condition == ('n' || 'N'))
-				{
-					run = 0;
-					break;
-				}
-				else
-					printf("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ½Ê½Ã¿À.\n\n");
-			}
-		}
-		break;
-	case '2': // ÀÏ´Ü ÀüÃ¼Ãâ·Â¸¸ ±¸ÇöÇØ³õ¾Ò½À´Ï´Ù.
-		for (i=0; i<count; ++i)
-		{
-			printf("====%d¹ø µµ¼­====\n", i);
-			printf("Á¦¸ñ : %s\n", arr[i].title);
-			printf("ÀúÀÚ : %s\n", arr[i].author);
-			printf("ÆäÀÌÁö¼ö : %d\n", arr[i].page);
-		}
-		break;
-	case '3':
-		break;
-	case '4':
-		break;
-	case '5':
-		break;
-	case '6':
-		break;
-	default:
-		printf("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ½Ê½Ã¿À.\n");
-		break;
-	}
+	InitBook(&bkArray);
+	RUN(&bkArray);
+	EndBook(&bkArray);
 }
