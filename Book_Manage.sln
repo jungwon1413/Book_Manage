@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Book_Manage", "Book_Manage\Book_Manage.vcxproj", "{7CD8901F-4F79-4046-B59D-BD69348D3EF5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ㄷㅅㄱㄹ", "..\asfd\ㄷㅅㄱㄹ\ㄷㅅㄱㄹ.vcxproj", "{E008DBD3-0586-4FA8-B924-C0FC84773CB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,12 @@ Global
 		{7CD8901F-4F79-4046-B59D-BD69348D3EF5}.Release|x64.Build.0 = Release|x64
 		{7CD8901F-4F79-4046-B59D-BD69348D3EF5}.Release|x86.ActiveCfg = Release|Win32
 		{7CD8901F-4F79-4046-B59D-BD69348D3EF5}.Release|x86.Build.0 = Release|Win32
+		{E008DBD3-0586-4FA8-B924-C0FC84773CB7}.Debug|x64.ActiveCfg = Debug|Win32
+		{E008DBD3-0586-4FA8-B924-C0FC84773CB7}.Debug|x86.ActiveCfg = Debug|Win32
+		{E008DBD3-0586-4FA8-B924-C0FC84773CB7}.Debug|x86.Build.0 = Debug|Win32
+		{E008DBD3-0586-4FA8-B924-C0FC84773CB7}.Release|x64.ActiveCfg = Release|Win32
+		{E008DBD3-0586-4FA8-B924-C0FC84773CB7}.Release|x86.ActiveCfg = Release|Win32
+		{E008DBD3-0586-4FA8-B924-C0FC84773CB7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
