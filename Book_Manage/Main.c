@@ -16,6 +16,8 @@ struct BOOK_INFO
 	int bookCount;
 };
 
+
+
 void FreeBook (BOOK* bk)
 {
 	free(bk->title);
